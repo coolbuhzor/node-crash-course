@@ -1,14 +1,20 @@
 const http = require("http");
 const fs = require("fs");
+const _ = require("lodash");
 const server = http.createServer((req, res) => {
   console.log(req.url, req.method);
 
+  //
+  const num = _.random(0, 20);
+  console.log(num);
   //  set header content type
   res.setHeader("content-type", "text/html");
-  //   res.write("<p>Hello my fans</p>");
-  //   res.write("<p>dey play my fans</p>");
-  //   res.end();
 
+  const greet = _.once(() => {
+    console.log("hello");
+  });
+
+  greet();
   //get the url path
   let path = "./views/";
 
@@ -20,6 +26,12 @@ const server = http.createServer((req, res) => {
     case "/about":
       path += "about.html";
       res.statusCode = 200;
+      break;
+    case "/about-me":
+      // path += "about.html";
+      res.setHeader("Location", "/about");
+      res.statusCode = 301;
+      res.end();
       break;
     default:
       path += "404.html";
